@@ -12,7 +12,7 @@ const DataTable = ({ classes, rows, columns, ...rest }) => {
             rows={rows}
             columns={columns}
             pageSize={5}
-            rowsPerPageOptions={[5]}
+            rowsPerPageOptions={[5, 10, 15]}
             checkboxSelection
             {...rest}
         />
