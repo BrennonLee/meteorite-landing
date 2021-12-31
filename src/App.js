@@ -1,7 +1,14 @@
 import React from 'react';
+import { Provider as StoreProvider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import { CircularProgress } from '@material-ui/core';
+import createStore from './store';
 import './App.css';
-import DataTable from './common/DataTable';
-import { Grid } from '@material-ui/core';
+import theme from './theme';
+import Router from './Router';
+
+const { persistor, store, history } = createStore();
 
 function App() {
     /**
@@ -16,13 +23,13 @@ function App() {
      * - Check mobile styling
      */
     return (
-        <Grid
-            data-testid="home-container"
-            container
-            style={{ height: 500, display: 'flex', flex: 1, padding: '2rem' }}
-        >
-            <DataTable />
-        </Grid>
+        <StoreProvider store={store}>
+            <PersistGate loading={<CircularProgress />} persistor={persistor}>
+                <MuiThemeProvider theme={theme}>
+                    <Router history={history} />
+                </MuiThemeProvider>
+            </PersistGate>
+        </StoreProvider>
     );
 }
 
