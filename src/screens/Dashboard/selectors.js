@@ -10,5 +10,4 @@ export const isDashboardLoading = createSelector(
 export const getMeteorData = createSelector(getDashboardState, (state) => {
     const { meteorData = [] } = state;
     return meteorData;
-    // return transformMeteorDataForDashboard
 });

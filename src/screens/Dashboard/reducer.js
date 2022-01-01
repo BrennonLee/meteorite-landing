@@ -4,9 +4,10 @@ import {
     FETCH_DASHBOARD_REQUESTED,
 } from './actions';
 
-const initialState = {
+export const initialState = {
     loading: false,
     meteorData: [],
+    error: null,
 };
 
 export default function (state = initialState, action = {}) {
@@ -17,6 +18,7 @@ export default function (state = initialState, action = {}) {
             return {
                 ...state,
                 loading: false,
+                error: null,
                 meteorData,
             };
         }

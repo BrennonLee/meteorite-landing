@@ -1,19 +1,34 @@
 import React from 'react';
 import styles from './styles';
-import { withStyles } from '@material-ui/core';
+import { LinearProgress, withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridOverlay, GridToolbar } from '@mui/x-data-grid';
 import { SAMPLE_COLUMNS, SAMPLE_ROWS } from './constants';
+
+/**
+ * Custom linear loading indicator to render at the top of the table
+ * @returns {JSX.Element}
+ */
+const linearLoading = () => {
+    return (
+        <GridOverlay>
+            <div style={{ position: 'absolute', top: 0, width: '100%' }}>
+                <LinearProgress />
+            </div>
+        </GridOverlay>
+    );
+};
 
 const DataTable = ({ classes, rows, columns, ...rest }) => {
     return (
         <DataGrid
-            data-testid="data-grid"
             rows={rows}
             columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5, 10, 15]}
             checkboxSelection
+            components={{
+                Toolbar: GridToolbar,
+                LoadingOverlay: linearLoading,
+            }}
             {...rest}
         />
     );
@@ -22,12 +37,11 @@ const DataTable = ({ classes, rows, columns, ...rest }) => {
 DataTable.propTypes = {
     // Comes from withStyles
     classes: PropTypes.object.isRequired,
-    rows: PropTypes.number,
-    columns: PropTypes.number,
+    rows: PropTypes.array,
+    columns: PropTypes.array,
 };
 
 DataTable.defaultProps = {
-    // TODO: Replace default values
     rows: SAMPLE_ROWS,
     columns: SAMPLE_COLUMNS,
 };
