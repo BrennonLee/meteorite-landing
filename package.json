@@ -37,7 +37,8 @@
         "pretty": "prettier --write '{*,{src,public,docs,.storybook}/**/*,__{tests,mocks}__/**/*}.{js,jsx,json,md,yml,html}'",
         "fixcode": "yarn run -s lint:raw --fix; yarn run -s pretty && yarn run -s lint",
         "commit": "cz",
-        "storybook": "start-storybook -c .storybook -s public -p 6006"
+        "build-storybook": "build-storybook -c .storybook -s public -o .storybook.out",
+        "storybook-build": ""
     },
     "prettier": "@carimus/prettier-config",
     "eslintConfig": {
