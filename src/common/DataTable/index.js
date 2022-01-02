@@ -4,6 +4,7 @@ import { LinearProgress, withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { DataGrid, GridOverlay, GridToolbar } from '@mui/x-data-grid';
 import { SAMPLE_COLUMNS, SAMPLE_ROWS } from './constants';
+import { noop } from '../../utils';
 
 /**
  * Custom linear loading indicator to render at the top of the table
@@ -22,7 +23,7 @@ const linearLoading = () => {
     );
 };
 
-const DataTable = ({ classes, rows, columns, ...rest }) => {
+const DataTable = ({ classes, rows, columns, onSelectMeteorRow, ...rest }) => {
     return (
         <DataGrid
             rows={rows}
@@ -32,6 +33,7 @@ const DataTable = ({ classes, rows, columns, ...rest }) => {
                 Toolbar: GridToolbar,
                 LoadingOverlay: linearLoading,
             }}
+            onSelectionModelChange={onSelectMeteorRow}
             {...rest}
         />
     );
@@ -42,11 +44,17 @@ DataTable.propTypes = {
     classes: PropTypes.object.isRequired,
     rows: PropTypes.array,
     columns: PropTypes.array,
+    onSelectMeteorRow: PropTypes.func,
+
+    /*
+     * For additional built in MUI props, see https://mui.com/api/data-grid/data-grid/#props
+     */
 };
 
 DataTable.defaultProps = {
     rows: SAMPLE_ROWS,
     columns: SAMPLE_COLUMNS,
+    onSelectMeteorRow: noop,
 };
 
 export default withStyles(styles)(DataTable);

@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { addFavoriteMeteorsToRawData } from './transforms';
 
 const getDashboardState = (state = {}) => state.dashboard;
 
@@ -7,7 +8,22 @@ export const isDashboardLoading = createSelector(
     (state) => state.isLoading,
 );
 
+export const getFavoriteMeteorIds = createSelector(
+    getDashboardState,
+    (state) => {
+        return state.favoriteMeteorIds || [];
+    },
+);
+
 export const getMeteorData = createSelector(getDashboardState, (state) => {
     const { meteorData = [] } = state;
-    return meteorData;
+    return meteorData || [];
 });
+
+export const getMeteorDataForDashboard = createSelector(
+    getFavoriteMeteorIds,
+    getMeteorData,
+    (favoriteIds = [], meteorData = []) => {
+        return addFavoriteMeteorsToRawData(favoriteIds, meteorData);
+    },
+);
