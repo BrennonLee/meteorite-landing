@@ -1,22 +1,42 @@
+import React from 'react';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { HTTP_STATUS_OK } from '../../utils';
+import { orange } from '../../theme/index';
+
+export const DATA_SET_SOURCE =
+    'https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh';
 
 export const METEOR_DATA_COLUMNS = [
+    {
+        field: 'favorite',
+        headerName: 'Favorite',
+        type: 'boolean',
+        width: 150,
+        renderCell: (params) => {
+            const { formattedValue } = params;
+            if (formattedValue === 'true') {
+                return <FavoriteIcon style={{ fill: orange }} />;
+            } else {
+                return <FavoriteBorderIcon />;
+            }
+        },
+    },
     { field: 'id', headerName: 'ID' },
-    { field: 'name', headerName: 'Name' },
+    { field: 'name', headerName: 'Name', width: 200 },
     { field: 'nametype', headerName: 'Type' },
     { field: 'recclass', headerName: 'Class' },
     { field: 'mass', headerName: 'Mass (g)' },
     { field: 'fall', headerName: 'Fall' },
-    { field: 'year', headerName: 'Year' },
+    { field: 'year', headerName: 'Year', width: 200 },
     {
         field: 'geolocation',
         headerName: 'Coordinates',
-        width: 210,
+        width: 180,
         valueGetter: (params) =>
             `${params.getValue(params.id, 'reclat') || ''},
              ${params.getValue(params.id, 'reclong') || ''}`,
     },
-    { field: 'favorite', headerName: 'Favorite', type: 'boolean' },
 ];
 
 // Sample response of meteor data

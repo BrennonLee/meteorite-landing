@@ -23,7 +23,11 @@ export function* fetchMeteorData() {
             const meteorLandings = yield call([response, 'json']);
             yield put(fetchDashboardRequestSucceeded(meteorLandings));
         } else {
-            yield put(fetchDashboardRequestFailed('Something went wrong'));
+            yield put(
+                fetchDashboardRequestFailed(
+                    'Something went wrong. Please refresh your browser and try again.',
+                ),
+            );
         }
     } catch (error) {
         // eslint-disable-next-line no-console

@@ -52,12 +52,12 @@ describe('Dashboard Saga tests', () => {
             .provide([[matchers.call.fn(requestMeteorData), null]])
             .put({
                 type: FETCH_DASHBOARD_REQUEST_FAILED,
-                error: 'Something went wrong',
+                error: 'Something went wrong. Please refresh your browser and try again.',
             })
             .hasFinalState({
                 ...initialState,
                 loading: false,
-                error: 'Something went wrong',
+                error: 'Something went wrong. Please refresh your browser and try again.',
             })
             .dispatch({ type: FETCH_DASHBOARD_REQUESTED })
             .run();
