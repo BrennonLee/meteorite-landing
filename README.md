@@ -1,70 +1,67 @@
-# Getting Started with Create React App
+# Meteorite Landings
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React Web Application that allows users to query, filter, and favorite specific meteorites.
 
-## Available Scripts
+The dataset used for this project can be found at [NASA's Open Data Portal](https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh).
 
-In the project directory, you can run:
+## Table of Contents
 
-### `yarn start`
+1. [Quickstart](#quickstart)
+2. [Contributing](#contributing)
+3. [Testing](#testing)
+4. [Deployment](#deployment)
+5. [Technology Stack](#technology-stack)
+6. [TODO](#todo)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Quickstart
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. Install Node 12.14.1+ from https://nodejs.org/en/download/
+2. Clone this repository.
+    > git clone https://github.com/BrennonLee/meteorite-landing.git
+3. Navigate to this repository.
+    > cd meteorite-landing
+4. Install the project dependencies and start the app.
+    > yarn && yarn start
+5. Application will be available on http://localhost:3000
 
-### `yarn test`
+## Contributing
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Code quality is managed through ESLint and Prettier. Inherited settings extend from [@carimus/prettier-config](https://github.com/Carimus/prettier-config) and [@carimus/eslint-config-react](https://github.com/Carimus/eslint-config-react).
+All code is validated upon being committed.
 
-### `yarn build`
+## Testing
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Tests can be ran from the root of the project.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+> yarn test
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+This will scan the codebase and run any files matching the format `<file_name>.test.js` (i.e. `index.test.js` or `saga.test.js`).
+<br><br>
+Tests utilize [Jest](https://testing-library.com/docs/react-testing-library/intro/) as well as [redux-saga-test-plan](https://github.com/jfairbank/redux-saga-test-plan) to cover redux saga integration into the application.
 
-### `yarn eject`
+## Deployment
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Deployment processes have the following flow:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+| Stage                       | Description                                                                                                                                                                                 |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Pull Request against master | _ Jest tests will execute. <br> _ Preview link for React App will be generated and attached to PR. <br> \* Preview link for Storybook will be generated and attached to PR.                 |
+| Merge into Master           | _ Jest tests will execute. <br> _ React App will be deployed to https://meteorite-landing.vercel.app. <br> \* Storybook will be deployed to https://meteorite-landing-storybook.vercel.app. |
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Every pull request that is opened will automatically have two preview links generated via Vercel.
+The first link will be a preview of the React Web App with the latest updates. The second will be a preview
+link of the Storybook application to provide a way to view components, screens, and all their possible states.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Technology Stack
 
-## Learn More
+Project was created with
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+-   [Create React App](https://github.com/facebook/create-react-app)
+-   [Storybook](https://storybook.js.org/)
+-   [Material UI](https://mui.com/)
+-   [React Redux](https://react-redux.js.org/)
+-   [Vercel](https://vercel.com/)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## TODO
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+-   [ ] Enhance user visualization via different types of graphs in addition to our table

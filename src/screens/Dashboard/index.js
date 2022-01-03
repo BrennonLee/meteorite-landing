@@ -54,7 +54,7 @@ const Dashboard = ({
     const renderHeader = () => {
         return (
             <>
-                <AppBar position="fixed">
+                <AppBar position="fixed" data-testid="app-header">
                     <Toolbar>
                         <Typography variant="h1">Meteorite Landings</Typography>
                     </Toolbar>
@@ -66,6 +66,7 @@ const Dashboard = ({
 
     const renderFavoriteButton = () => (
         <Button
+            data-testid="favorite-button"
             onClick={() => onFavoriteClick && onFavoriteClick(selectedRows)}
             disabled={
                 !(selectedRows && selectedRows.length) ||
@@ -83,6 +84,7 @@ const Dashboard = ({
 
     const renderUnFavoriteButton = () => (
         <Button
+            data-testid="unFavorite-button"
             onClick={() => onUnFavoriteClick && onUnFavoriteClick(selectedRows)}
             disabled={!intersection(favoriteMeteors, selectedRows)?.length}
             classes={{
@@ -119,7 +121,7 @@ const Dashboard = ({
 
     const renderError = useCallback(() => {
         return (
-            <Grid item className={classes.error}>
+            <Grid item className={classes.error} data-testid="error-container">
                 <Typography className={classes.errorText}>{error}</Typography>
             </Grid>
         );
@@ -147,7 +149,7 @@ const Dashboard = ({
                 {renderFavoriteButton()}
                 {renderUnFavoriteButton()}
             </Grid>
-            {renderError()}
+            {error && renderError()}
             {renderDataTable()}
         </Grid>
     );
