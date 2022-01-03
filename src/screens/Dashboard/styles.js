@@ -38,6 +38,12 @@ export default (theme) => ({
         '&:hover': {
             cursor: 'pointer',
             backgroundColor: 'rgb(127, 07, 224)',
+            '&:disabled': {
+                backgroundColor: 'grey',
+            },
+        },
+        '&:disabled': {
+            backgroundColor: 'grey',
         },
     },
     buttonLabel: {
