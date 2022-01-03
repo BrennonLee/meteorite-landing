@@ -1,6 +1,13 @@
 import React, { useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Grid, Button, withStyles } from '@material-ui/core';
+import {
+    Grid,
+    Button,
+    withStyles,
+    AppBar,
+    Toolbar,
+    Typography,
+} from '@material-ui/core';
 import DataTable from '../../common/DataTable';
 import PropTypes from 'prop-types';
 import styles from './styles';
@@ -10,12 +17,13 @@ import {
     unFavoriteSelectedMeteors,
 } from './actions';
 import {
+    getErrorForDashboard,
     getFavoriteMeteorIds,
     getMeteorDataForDashboard,
     isDashboardLoading,
 } from './selectors';
 import { noop } from '../../utils';
-import { METEOR_DATA_COLUMNS } from './constants';
+import { METEOR_DATA_COLUMNS, DATA_SET_SOURCE } from './constants';
 import { intersection } from 'ramda';
 
 const Dashboard = ({
@@ -26,6 +34,7 @@ const Dashboard = ({
     onFavoriteClick,
     favoriteMeteors,
     onUnFavoriteClick,
+    error,
 }) => {
     useEffect(() => {
         onLoad && onLoad();
@@ -42,70 +51,106 @@ const Dashboard = ({
         },
     ]);
 
-    const renderFavoriteButton = () => {
-        if (Array.isArray(selectedRows) && selectedRows.length) {
-            return (
-                <Button
-                    onClick={() =>
-                        onFavoriteClick && onFavoriteClick(selectedRows)
-                    }
-                >
-                    Favorite
-                </Button>
-            );
-        }
+    const renderHeader = () => {
+        return (
+            <>
+                <AppBar position="fixed" data-testid="app-header">
+                    <Toolbar>
+                        <Typography variant="h1">Meteorite Landings</Typography>
+                    </Toolbar>
+                </AppBar>
+                <Toolbar />
+            </>
+        );
     };
 
-    const renderUnFavoriteButton = () => {
-        // Conditionally render the unFavorite button only when currently favorited rows are selected.
-        if (
-            favoriteMeteors.length &&
-            selectedRows.length &&
-            intersection(favoriteMeteors && selectedRows)?.length
-        ) {
-            return (
-                <Button
-                    onClick={() =>
-                        onUnFavoriteClick && onUnFavoriteClick(selectedRows)
-                    }
-                >
-                    UnFavorite
-                </Button>
-            );
-        }
-    };
+    const renderFavoriteButton = () => (
+        <Button
+            data-testid="favorite-button"
+            onClick={() => onFavoriteClick && onFavoriteClick(selectedRows)}
+            disabled={
+                !(selectedRows && selectedRows.length) ||
+                intersection(favoriteMeteors, selectedRows)?.length
+            }
+            classes={{
+                root: classes.button,
+                label: classes.buttonLabel,
+                disabled: classes.disabled,
+            }}
+        >
+            Favorite
+        </Button>
+    );
+
+    const renderUnFavoriteButton = () => (
+        <Button
+            data-testid="unFavorite-button"
+            onClick={() => onUnFavoriteClick && onUnFavoriteClick(selectedRows)}
+            disabled={!intersection(favoriteMeteors, selectedRows)?.length}
+            classes={{
+                root: classes.button,
+                label: classes.buttonLabel,
+                disabled: classes.disabled,
+            }}
+        >
+            Remove Favorite
+        </Button>
+    );
 
     const renderDataTable = useCallback(() => {
         return (
-            <DataTable
-                loading={loading}
-                columns={METEOR_DATA_COLUMNS}
-                rows={meteorData}
-                onSelectMeteorRow={setSelectedRows}
-                sortModel={sortModel}
-                onSortModelChange={setSortModel}
-            />
+            <Grid item className={classes.dataContainer}>
+                <DataTable
+                    loading={loading}
+                    columns={METEOR_DATA_COLUMNS}
+                    rows={meteorData}
+                    onSelectMeteorRow={setSelectedRows}
+                    sortModel={sortModel}
+                    onSortModelChange={setSortModel}
+                />
+            </Grid>
         );
-    }, [loading, meteorData, setSelectedRows, sortModel, setSortModel]);
+    }, [
+        classes,
+        loading,
+        meteorData,
+        setSelectedRows,
+        sortModel,
+        setSortModel,
+    ]);
 
-    /**
-     * TODO:
-     * - Error response UI
-     * - Check mobile styling
-     */
+    const renderError = useCallback(() => {
+        return (
+            <Grid item className={classes.error} data-testid="error-container">
+                <Typography className={classes.errorText}>{error}</Typography>
+            </Grid>
+        );
+    }, [classes, error]);
+
     return (
         <Grid
             data-testid="dashboard-container"
             container
             className={classes.dashboardContainer}
         >
+            {renderHeader()}
+            <Grid item className={classes.datasource}>
+                <Typography>Meteorite Dataset Source:</Typography>
+                <a
+                    className={classes.link}
+                    href={DATA_SET_SOURCE}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    {DATA_SET_SOURCE}
+                </a>
+            </Grid>
             <Grid item className={classes.buttonContainer}>
                 {renderFavoriteButton()}
                 {renderUnFavoriteButton()}
             </Grid>
-            <Grid item className={classes.dataContainer}>
-                {renderDataTable()}
-            </Grid>
+            {error && renderError()}
+            {renderDataTable()}
         </Grid>
     );
 };
@@ -119,6 +164,9 @@ Dashboard.propTypes = {
 
     // loading prop value that controls the loading indicator
     loading: PropTypes.bool,
+
+    // Error text to render to the user (if one occurs)
+    error: PropTypes.string,
 
     /*
      * Resulting meteor data that will take the shape of the following:
@@ -154,6 +202,7 @@ Dashboard.defaultProps = {
     onLoad: noop,
     onFavoriteClick: noop,
     onUnFavoriteClick: noop,
+    error: null,
 };
 
 export const StyledDashboard = withStyles(styles)(Dashboard);
@@ -162,6 +211,7 @@ const mapStateToProps = (state) => ({
     loading: isDashboardLoading(state),
     meteorData: getMeteorDataForDashboard(state),
     favoriteMeteors: getFavoriteMeteorIds(state),
+    error: getErrorForDashboard(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

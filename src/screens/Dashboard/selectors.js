@@ -27,3 +27,8 @@ export const getMeteorDataForDashboard = createSelector(
         return addFavoriteMeteorsToRawData(favoriteIds, meteorData);
     },
 );
+
+export const getErrorForDashboard = createSelector(
+    getDashboardState,
+    (state) => state.error,
+);
