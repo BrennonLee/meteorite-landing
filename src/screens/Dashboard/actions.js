@@ -18,27 +18,15 @@ export const fetchDashboardRequestSucceeded = (meteorData) => ({
     meteorData,
 });
 
-export const FAVORITE_METEORS_REQUESTED = `${PREFIX}FAVORITE_METEORS_REQUESTED`;
-export const UN_FAVORITE_METEORS_REQUESTED = `${PREFIX}UN_FAVORITE_METEORS_REQUESTED`;
-export const FAVORITE_METEORS_UPDATE = `${PREFIX}FAVORITE_METEORS_UPDATE`;
-export const UN_FAVORITE_METEORS_UPDATE = `${PREFIX}UN_FAVORITE_METEORS_UPDATE`;
+export const TOGGLE_SELECTED_METEOR_REQUESTED = `${PREFIX}TOGGLE_SELECTED_METEOR_REQUESTED`;
+export const UPDATE_FAVORITE_METEORS = `${PREFIX}UPDATE_FAVORITE_METEORS`;
 
-export const favoriteSelectedMeteors = (meteorIds) => ({
-    type: FAVORITE_METEORS_REQUESTED,
+export const toggleSelectedMeteor = (meteorId) => ({
+    type: TOGGLE_SELECTED_METEOR_REQUESTED,
+    meteorId,
+});
+
+export const updateFavoriteMeteors = (meteorIds) => ({
+    type: UPDATE_FAVORITE_METEORS,
     meteorIds,
-});
-
-export const unFavoriteSelectedMeteors = (meteorIds) => ({
-    type: UN_FAVORITE_METEORS_REQUESTED,
-    meteorIds,
-});
-
-export const favoriteMeteorsUpdate = (newFavoriteIds) => ({
-    type: FAVORITE_METEORS_UPDATE,
-    newFavoriteIds,
-});
-
-export const unFavoriteMeteorUpdate = (newFavoriteIds) => ({
-    type: UN_FAVORITE_METEORS_UPDATE,
-    newFavoriteIds,
 });

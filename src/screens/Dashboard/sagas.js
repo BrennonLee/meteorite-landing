@@ -1,12 +1,10 @@
 import { all, takeLatest, put, call, select } from 'redux-saga/effects';
 import {
-    FAVORITE_METEORS_REQUESTED,
-    UN_FAVORITE_METEORS_REQUESTED,
+    TOGGLE_SELECTED_METEOR_REQUESTED,
     FETCH_DASHBOARD_REQUESTED,
-    favoriteMeteorsUpdate,
     fetchDashboardRequestFailed,
     fetchDashboardRequestSucceeded,
-    unFavoriteMeteorUpdate,
+    updateFavoriteMeteors,
 } from './actions';
 import { HTTP_STATUS_OK, requestMeteorData } from '../../utils';
 import { getFavoriteMeteorIds } from './selectors';
@@ -37,39 +35,29 @@ export function* fetchMeteorData() {
 }
 
 /**
- * Will retrieve the currently favorited meteor IDs and any selected meteors
- * that haven't already been selected will be added to the list.
- * @param {array} meteorIds Array of string meteor Ids to favorite
+ * Function will examine the current store for what meteors are already marked as a favorite and will either
+ * add or remove the given meteor ID from the store.
+ * @param {String} meteorId The ID of the meteor to be either favorited or removed from the list of favorites
  * @returns SimpleEffect
  */
-export function* favoriteSelectedMeteors({ meteorIds = [] }) {
+export function* toggleSelectedMeteor({ meteorId }) {
     const favoriteMeteorIds = yield select(getFavoriteMeteorIds);
-    const newFavoriteIds = [];
-    meteorIds.forEach((id) => {
-        if (!favoriteMeteorIds.includes(id)) {
-            newFavoriteIds.push(id);
-        }
-    });
-    yield put(favoriteMeteorsUpdate(newFavoriteIds));
-}
-
-/**
- * Will retrieve the currently favorited meteor IDs and filter out any that match the selected to be removed.
- * @param {array} meteorIds Array of selected meteor ids to remove
- * @returns SimpleEffect
- */
-export function* unFavoriteSelectedMeteors({ meteorIds = [] }) {
-    const favoriteMeteorIds = yield select(getFavoriteMeteorIds);
-    const newFavoriteIds = favoriteMeteorIds.filter(
-        (id) => !meteorIds.includes(id),
-    );
-    yield put(unFavoriteMeteorUpdate(newFavoriteIds));
+    let newFavoriteIds = [];
+    /*
+     * If the given meteor id already exists, remove it from the list of favorites.
+     * Otherwise, add it to the array.
+     */
+    if (favoriteMeteorIds.includes(meteorId)) {
+        newFavoriteIds = favoriteMeteorIds.filter((id) => id !== meteorId);
+    } else {
+        newFavoriteIds = [...favoriteMeteorIds, meteorId];
+    }
+    yield put(updateFavoriteMeteors(newFavoriteIds));
 }
 
 export default function* () {
     yield all([
         takeLatest(FETCH_DASHBOARD_REQUESTED, fetchMeteorData),
-        takeLatest(FAVORITE_METEORS_REQUESTED, favoriteSelectedMeteors),
-        takeLatest(UN_FAVORITE_METEORS_REQUESTED, unFavoriteSelectedMeteors),
+        takeLatest(TOGGLE_SELECTED_METEOR_REQUESTED, toggleSelectedMeteor),
     ]);
 }

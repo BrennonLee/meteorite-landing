@@ -12,9 +12,10 @@ export const METEOR_DATA_COLUMNS = [
         field: 'favorite',
         headerName: 'Favorite',
         type: 'boolean',
-        width: 150,
+        width: 120,
         renderCell: (params) => {
             const { formattedValue } = params;
+            // Conditionally render the favorite versus unfavorited icon based on boolean value
             if (formattedValue === 'true') {
                 return <FavoriteIcon style={{ fill: orange }} />;
             } else {
@@ -22,13 +23,20 @@ export const METEOR_DATA_COLUMNS = [
             }
         },
     },
-    { field: 'id', headerName: 'ID' },
-    { field: 'name', headerName: 'Name', width: 200 },
+    { field: 'id', headerName: 'ID', width: 80 },
+    { field: 'name', headerName: 'Name', width: 190 },
     { field: 'nametype', headerName: 'Type' },
     { field: 'recclass', headerName: 'Class' },
     { field: 'mass', headerName: 'Mass (g)' },
     { field: 'fall', headerName: 'Fall' },
-    { field: 'year', headerName: 'Year', width: 200 },
+    {
+        field: 'year',
+        headerName: 'Year',
+        valueGetter: (params) => {
+            const date = new Date(params.value);
+            return `${date.getFullYear()}`;
+        },
+    },
     {
         field: 'geolocation',
         headerName: 'Coordinates',

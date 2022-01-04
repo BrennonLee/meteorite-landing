@@ -23,17 +23,41 @@ const linearLoading = () => {
     );
 };
 
-const DataTable = ({ classes, rows, columns, onSelectMeteorRow, ...rest }) => {
+const DataTable = ({
+    classes,
+    rows,
+    columns,
+    onSelectMeteorRow,
+    onFavoriteClick,
+    ...rest
+}) => {
     return (
         <DataGrid
+            sx={{
+                '& .favoriteColumn:hover': {
+                    cursor: 'pointer',
+                },
+            }}
+            className={classes.root}
             rows={rows}
             columns={columns}
-            checkboxSelection
             components={{
                 Toolbar: GridToolbar,
                 LoadingOverlay: linearLoading,
             }}
             onSelectionModelChange={onSelectMeteorRow}
+            onCellClick={(params, event) => {
+                const { id, field } = params;
+                if (field === 'favorite') {
+                    onFavoriteClick && onFavoriteClick(id);
+                }
+            }}
+            getCellClassName={(params) => {
+                const { field } = params;
+                if (field === 'favorite') {
+                    return 'favoriteColumn';
+                }
+            }}
             {...rest}
         />
     );
@@ -46,6 +70,9 @@ DataTable.propTypes = {
     columns: PropTypes.array,
     onSelectMeteorRow: PropTypes.func,
 
+    // Custom cell click function to toggle favorites
+    onFavoriteClick: PropTypes.func,
+
     /*
      * For additional built in MUI props, see https://mui.com/api/data-grid/data-grid/#props
      */
@@ -55,6 +82,7 @@ DataTable.defaultProps = {
     rows: SAMPLE_ROWS,
     columns: SAMPLE_COLUMNS,
     onSelectMeteorRow: noop,
+    onFavoriteClick: noop,
 };
 
 export default withStyles(styles)(DataTable);
