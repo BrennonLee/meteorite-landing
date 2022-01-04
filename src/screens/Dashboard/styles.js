@@ -32,6 +32,7 @@ export default (theme) => ({
         [theme.breakpoints.down('md')]: {
             width: '100%',
             padding: '15px 0 0 0',
+            height: 500,
         },
     },
 });
