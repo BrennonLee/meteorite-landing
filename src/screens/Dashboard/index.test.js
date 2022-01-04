@@ -7,8 +7,6 @@ describe('Dashboard render tests', () => {
     test('Dashboard renders and is visible', () => {
         render(<Dashboard meteorData={SAMPLE_METEOR_DATA_RESPONSE} />);
         expect(screen.getByTestId('app-header')).toBeVisible();
-        expect(screen.getByTestId('favorite-button')).toBeVisible();
-        expect(screen.getByTestId('unFavorite-button')).toBeVisible();
         expect(screen.getByTestId('dashboard-container')).toBeVisible();
         expect(
             screen.queryByTestId('loading-indicator'),
@@ -19,8 +17,6 @@ describe('Dashboard render tests', () => {
     test('Dashboard renders and is visible with loading indicator', () => {
         render(<Dashboard meteorData={SAMPLE_METEOR_DATA_RESPONSE} loading />);
         expect(screen.getByTestId('app-header')).toBeVisible();
-        expect(screen.getByTestId('favorite-button')).toBeVisible();
-        expect(screen.getByTestId('unFavorite-button')).toBeVisible();
         expect(screen.getByTestId('dashboard-container')).toBeVisible();
         expect(screen.getByTestId('loading-indicator')).toBeVisible();
         expect(screen.queryByTestId('error-container')).not.toBeInTheDocument();
@@ -34,8 +30,6 @@ describe('Dashboard render tests', () => {
             />,
         );
         expect(screen.getByTestId('app-header')).toBeVisible();
-        expect(screen.getByTestId('favorite-button')).toBeVisible();
-        expect(screen.getByTestId('unFavorite-button')).toBeVisible();
         expect(screen.getByTestId('dashboard-container')).toBeVisible();
         expect(
             screen.queryByTestId('loading-indicator'),

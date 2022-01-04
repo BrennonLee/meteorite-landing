@@ -1,9 +1,8 @@
 import {
-    FAVORITE_METEORS_UPDATE,
     FETCH_DASHBOARD_REQUEST_FAILED,
     FETCH_DASHBOARD_REQUEST_SUCCEEDED,
     FETCH_DASHBOARD_REQUESTED,
-    UN_FAVORITE_METEORS_UPDATE,
+    UPDATE_FAVORITE_METEORS,
 } from './actions';
 
 export const initialState = {
@@ -39,21 +38,11 @@ export default function (state = initialState, action = {}) {
                 error,
             };
         }
-        case FAVORITE_METEORS_UPDATE: {
-            const { newFavoriteIds } = action;
+        case UPDATE_FAVORITE_METEORS: {
+            const { meteorIds } = action;
             return {
                 ...state,
-                favoriteMeteorIds: [
-                    ...state.favoriteMeteorIds,
-                    ...newFavoriteIds,
-                ],
-            };
-        }
-        case UN_FAVORITE_METEORS_UPDATE: {
-            const { newFavoriteIds } = action;
-            return {
-                ...state,
-                favoriteMeteorIds: [...newFavoriteIds],
+                favoriteMeteorIds: [...meteorIds],
             };
         }
         default: {

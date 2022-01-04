@@ -1,8 +1,4 @@
-import {
-    favoriteSelectedMeteors,
-    fetchMeteorData,
-    unFavoriteSelectedMeteors,
-} from './sagas';
+import { fetchMeteorData, toggleSelectedMeteor } from './sagas';
 import { select } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import dashboardReducer, { initialState } from './reducer';
@@ -14,13 +10,11 @@ import {
     SUCCESSFUL_METEOR_RESPONSE,
 } from './constants';
 import {
-    FAVORITE_METEORS_REQUESTED,
-    FAVORITE_METEORS_UPDATE,
     FETCH_DASHBOARD_REQUEST_FAILED,
     FETCH_DASHBOARD_REQUEST_SUCCEEDED,
     FETCH_DASHBOARD_REQUESTED,
-    UN_FAVORITE_METEORS_REQUESTED,
-    UN_FAVORITE_METEORS_UPDATE,
+    TOGGLE_SELECTED_METEOR_REQUESTED,
+    UPDATE_FAVORITE_METEORS,
 } from './actions';
 import { getFavoriteMeteorIds } from './selectors';
 
@@ -85,17 +79,17 @@ describe('Dashboard Saga tests', () => {
             .dispatch({ type: FETCH_DASHBOARD_REQUESTED })
             .run();
     });
-    it('favoriteSelectedMeteors handles favorite meteors request', () => {
+    it('toggleSelectedMeteor handles adding new meteor id', () => {
         const action = {
-            type: FAVORITE_METEORS_REQUESTED,
-            meteorIds: ['1'],
+            type: TOGGLE_SELECTED_METEOR_REQUESTED,
+            meteorId: '1',
         };
-        return expectSaga(favoriteSelectedMeteors, action)
+        return expectSaga(toggleSelectedMeteor, action)
             .withReducer(dashboardReducer)
             .provide([[select(getFavoriteMeteorIds), []]])
             .put({
-                type: FAVORITE_METEORS_UPDATE,
-                newFavoriteIds: ['1'],
+                type: UPDATE_FAVORITE_METEORS,
+                meteorIds: ['1'],
             })
             .hasFinalState({
                 ...initialState,
@@ -104,20 +98,20 @@ describe('Dashboard Saga tests', () => {
             .dispatch(action)
             .run();
     });
-    it('favoriteSelectedMeteors handles merge of favorite meteors request', () => {
+    it('toggleSelectedMeteor handles merge of favorite meteors request', () => {
         const action = {
-            type: FAVORITE_METEORS_REQUESTED,
-            meteorIds: ['2'],
+            type: TOGGLE_SELECTED_METEOR_REQUESTED,
+            meteorId: '2',
         };
-        return expectSaga(favoriteSelectedMeteors, action)
+        return expectSaga(toggleSelectedMeteor, action)
             .withReducer(dashboardReducer, {
                 ...initialState,
                 favoriteMeteorIds: ['1'],
             })
             .provide([[select(getFavoriteMeteorIds), ['1']]])
             .put({
-                type: FAVORITE_METEORS_UPDATE,
-                newFavoriteIds: ['2'],
+                type: UPDATE_FAVORITE_METEORS,
+                meteorIds: ['1', '2'],
             })
             .hasFinalState({
                 ...initialState,
@@ -126,20 +120,20 @@ describe('Dashboard Saga tests', () => {
             .dispatch(action)
             .run();
     });
-    it('unFavoriteSelectedMeteors handles removal of meteor', async () => {
+    it('toggleSelectedMeteor handles removal of meteor id', async () => {
         const action = {
-            type: UN_FAVORITE_METEORS_REQUESTED,
-            meteorIds: ['2'],
+            type: TOGGLE_SELECTED_METEOR_REQUESTED,
+            meteorId: '2',
         };
-        return expectSaga(unFavoriteSelectedMeteors, action)
+        return expectSaga(toggleSelectedMeteor, action)
             .withReducer(dashboardReducer, {
                 ...initialState,
                 favoriteMeteorIds: ['1', '2'],
             })
             .provide([[select(getFavoriteMeteorIds), ['1', '2']]])
             .put({
-                type: UN_FAVORITE_METEORS_UPDATE,
-                newFavoriteIds: ['1'],
+                type: UPDATE_FAVORITE_METEORS,
+                meteorIds: ['1'],
             })
             .hasFinalState({
                 ...initialState,
