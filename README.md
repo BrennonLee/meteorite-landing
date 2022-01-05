@@ -45,8 +45,8 @@ Deployment processes have the following flow:
 
 | Stage                       | Description                                                                                                                                                                                 |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Pull Request against master | _ Jest tests will execute. <br> _ Preview link for React App will be generated and attached to PR. <br> \* Preview link for Storybook will be generated and attached to PR.                 |
-| Merge into Master           | _ Jest tests will execute. <br> _ React App will be deployed to https://meteorite-landing.vercel.app. <br> \* Storybook will be deployed to https://meteorite-landing-storybook.vercel.app. |
+| Pull Request against master | * Jest tests will execute. <br> * Preview link for React App will be generated and attached to PR. <br> \* Preview link for Storybook will be generated and attached to PR.                 |
+| Merge into Master           | * Jest tests will execute. <br> * React App will be deployed to https://meteorite-landing.vercel.app. <br> \* Storybook will be deployed to https://meteorite-landing-storybook.vercel.app. |
 
 Every pull request that is opened will automatically have two preview links generated via Vercel.
 The first link will be a preview of the React Web App with the latest updates. The second will be a preview
